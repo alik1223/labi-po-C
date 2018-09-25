@@ -1,2 +1,0 @@
-# labi-po-C
-adasdasdasdad
