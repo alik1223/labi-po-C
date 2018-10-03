@@ -1,38 +1,63 @@
 #include <stdio.h>
-#define MAXLINE 1024
-#define N 5
-void main( void )
+void main(void)
 {
-FILE *fpin; // входной файл
-FILE *fpout; // выходной файл
-char line[MAXLINE]; // текущая строка
-char *ptr;
-int sum=0;
-fpin = fopen( "test.txt", "rt" ); // открыть файл для чтения
-if( fpin == NULL )
-return; // ошибка при открытии файла
-fpout = fopen("result.txt", "wt" ); // открыть файл для записи
-if( fpout == NULL )
-return; // ошибка при открытии файла
-while( !feof( fpin ) )// цикл до конца входного файла
-{
-ptr = fgets( line, MAXLINE, fpin ); // чтение строки
-if( ptr == NULL )
-break; // файл исчерпан
-while( *ptr != '\0' ) // цикл до конца строки
-{
-if( sum==N )
-{
-*ptr++ = '\n'; // ставим символ "конец строки"
-*ptr = '\0'; // ставим ограничитель строки
-break;
+    char line[100];
+    int i;
+    int start; // позиция начала слова
+    int stop; // позиция конца слова
+    int flag; // признак слова
+    int sum;//число букв в слове
+    int k;
+    int j;
+    char c;
+    flag=0;
+    start = 0;
+    stop = 0;
+    i=0;
+    k=0;
+    sum=0;
+    gets(line);
+do
+    {
+    c=line[i];
+    if( c==' ' || c=='.' || c==',' || c=='\n' || c=='\0')
+    {
+        if (flag==1) // найден первый разделить после слова
+        {
+
+            stop=i-1;
+            if (sum%2!=0)
+            {
+            k = start;
+            for(j = stop+1; line[j] !='\0'; j++)// удаление слова (перенос оставшейся  части строки)
+            {
+                line[k]=line[j];
+                k++;
+            }
+            line[k]='\0';
+            i=start; //начать обработку строки с  перенесённого фрагмента
+            }
+        }
+        flag=0;
+        sum=0;
+    }
+    else
+    {
+      if (flag==0)
+      {
+      start=i; // запомнить позицию начала слова
+      }
+      sum++;
+      flag=1;
+    }
+    i++;
+    }
+    while( c!= '\0' );
+ puts(line);
 }
-ptr++; // продвигаем указатель по строке
-sum++;
-}
-fputs( line, fpout ); // запись строки
-sum=0;
-}
-fclose( fpin ); // закрыть входной файл
-fclose( fpout ); // закрыть выходной файл
-}
+
+
+
+
+
+
