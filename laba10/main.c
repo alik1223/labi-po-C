@@ -16,14 +16,10 @@ char Char[1000]={'c','h','a','r',':'};
 char Float[1000]={'f','l','o','a','t',':'};
 char Double[1000]={'d','o','u','b','l','e',':'};
 FILE *fpin;
-FILE *fpout;
 char *ptr;
 char line[MAXLINE];
 fpin = fopen( "test.txt", "rt" );
 if( fpin == NULL )
-return;
-fpout = fopen("result.txt", "wt" );
-if( fpout == NULL )
 return;
 while( !feof( fpin ) )
 {
@@ -37,7 +33,6 @@ else
     if (line[i]=='}') flag1=0;
 if (flag1==1)
 {
-for (i=0;i<3;i++)
 j=0;
 for (i=0;i<3;i++)
 {
@@ -188,7 +183,6 @@ i++;
 }
 }
 fclose(fpin);
-fclose(fpout);
 if (I!=4)
 {
 for (i=0;i<I;i++)
