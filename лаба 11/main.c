@@ -3,32 +3,51 @@
 #include <windows.h>
 void  main ( void )
 {
-int c;
+int i=0;
+int sum;
+int flag=0;
 FILE *f1;
 char *ptr;
-int s=0;
+int j;
 char line[MAXLINE];
 HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 SetConsoleTextAttribute(hConsole, 15);
 f1 = fopen( "test.txt", "rt" );
 if( f1 == NULL )
 return;
- while ((c = fgetc(f1))!=EOF)
+while( !feof( f1) )
 {
-
-    if (c=='"')
-    {
-    s++;
-    if (s%2!=0)
-    SetConsoleTextAttribute(hConsole, 11);
-    if (s%2==0)
-    {
-        printf("%c",c);
-        SetConsoleTextAttribute(hConsole, 15);
-        continue;
-    }
-    }
-     printf("%c",c);
+ptr = fgets( line, MAXLINE, f1 );
+if( ptr == NULL )
+break;
+i=0;
+while(line[i]!= '\0' )
+{
+if (line[i]=='"' && flag==1)
+{
+SetConsoleTextAttribute(hConsole, 11);
+for(j;j<=i;j++)
+printf("%c",line[j]);
+flag=0;
+SetConsoleTextAttribute(hConsole, 15);
+i++;
+}
+if (line[i]=='"')
+{
+    flag=1;
+    j=i;
+}
+if (flag==0)
+printf("%c",line[i]);
+i++;
+}
+if (flag==1)
+{
+    for (j;j<i;j++)
+    printf("%c",line[j]);
+    flag=0;
+}
 }
 fclose(f1);
 }
+
