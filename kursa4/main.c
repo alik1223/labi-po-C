@@ -1,46 +1,85 @@
 #include <stdio.h>
-void main()
+#include <locale.h>
+float number()
 {
-int a,b;
-FILE *fpin;
-fpin = fopen( "test.txt", "rt" );
-if( fpin == NULL )
-return;
-fscanf(fpin,"%d %d",&a,&b);
-int q=1;
-while (q!=0)
+  int res = 0;
+  for (;;)
+  {
+    char c = getchar();
+    if (c >= '0' && c <= '9')
+      res = res * 10 + c - '0';
+    else
     {
-        printf ("1 +\n");
-        printf ("2 -\n");
-        printf ("3 *\n");
-        printf ("4 /\n");
-        printf ("0 - vixod\n>");
-        scanf ("%d", &q);
-        switch (q)
-        {
-        case 1:
-            {
-                printf("%d\n",a+b);
-                break;
-            }
-
-        case 2:
-            {
-            printf("%d\n",a-b);
-            break;
-            }
-        case 3:
-            {
-            printf("%d\n",a*b);
-            break;
-            }
-        case 4:
-            {
-            printf("%d\n",a/b);
-            break;
-            }
-            case 0: break;
-            default: break;
-        }
+      ungetc(c,stdin);
+      return res;
     }
+  }
+}
+
+float expr();
+
+float skobki()
+{
+  char c = getchar();
+  if (c == '(')
+  {
+    float x = expr();
+    getchar();
+    return x;
+  }
+  else
+  {
+    ungetc(c,stdin);
+    return number();
+  }
+}
+
+
+float factor()
+{
+  float x = skobki();
+  for (;;)
+  {
+    char c =getchar();
+    switch (c)
+    {
+    case '*':
+      x *= skobki();
+      break;
+    case '/':
+      x /= skobki();
+      break;
+    default:
+     ungetc(c,stdin);
+      return x;
+    }
+  }
+}
+float expr()
+{
+  float x = factor();
+  for (;;)
+  {
+    char c = getchar();
+    switch (c)
+    {
+    case '+':
+      x += factor();
+      break;
+    case '-':
+      x -= factor();
+      break;
+    default:
+    ungetc(c,stdin);
+      return x;
+    }
+  }
+}
+int main()
+{
+    setlocale(LC_ALL, "Rus");
+    printf("Vvedite viragenie: ");
+    float res=expr();
+    printf("Result: %f",res);
+
 }
